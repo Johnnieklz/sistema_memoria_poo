@@ -15,6 +15,10 @@ if (!$usuarioSerializado) {
 }
 
 $usuario = unserialize($usuarioSerializado);
+
+if ($usuario instanceof Administrador){
+    $usuario ->listarUsuarios();
+}
 ?>
 
 <!DOCTYPE html>
