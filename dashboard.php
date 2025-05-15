@@ -4,6 +4,7 @@
 require_once 'classes/Usuario.php';
 require_once 'classes/Administrador.php';
 require_once 'classes/Sessao.php';
+require_once 'config.php'; // configurações e sessão
 
 Sessao::iniciar();
 
@@ -42,6 +43,9 @@ if ($usuario instanceof Administrador){
         <hr>
         <?php $usuario->listarUsuarios(); ?>
     <?php endif; ?>
+
+    <button onclick="alternarTema()">Alternar Tema</button>
+
 
     <p><a href="logout.php">Sair</a></p>
 </body>
