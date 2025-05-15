@@ -1,15 +1,13 @@
 <?php
+require_once 'config.php'; // configurações e sessão
 require_once 'classes/Usuario.php';
 require_once 'classes/Administrador.php';
-require_once 'classes/Sessao.php';
+required_once 'config.php'; // configurações e sessão
 
 Sessao::iniciar();
 
-$mensagem = $_SESSION["Mensagem"] ?? '';
-
-if (!empty ($_SESSION['Mensagem'])) {
-    unset($_SESSION['Mensagem']);
-}
+$mensagem = $_SESSION['mensagem'] ?? '';
+unset($_SESSION['mensagem']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
@@ -27,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($usuarios as $u) {
             if ($u['email'] === $email && password_verify($senha, $u['senha'])) {
-                // Cria instância da classe correta
+                // Herança: verifica se é admin
                 if ($u['email'] === 'admin@admin.com') {
                     $usuarioLogado = new Administrador($u['nome'], $u['email'], $senha, $u['idioma'], $u['tema']);
                 } else {
@@ -56,45 +54,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color:rgb(202, 29, 29);
-            padding: 20px;
-        }
-        h2 {
-            color: #333;
-        }
-        form {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        label {
-            display: block;
-            margin-bottom: 10px;
-        }
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            cursor: pointer;
-        }
-    </style>
 </head>
 <body>
     <h2>Login</h2>
+
+    <?php if ($mensagem): ?>
+        <p style="color: red;"><strong><?= htmlspecialchars($mensagem) ?></strong></p>
+    <?php endif; ?>
+
     <form method="POST">
         <label>Email: <input type="email" name="email" required></label><br><br>
         <label>Senha: <input type="password" name="senha" required></label><br><br>
         <button type="submit">Entrar</button>
     </form>
-    <p>Não tem conta? <a href="cadastro.php">Cadastre-se</a></p>
 
-    <?php if ($mensagem): ?>
-        <p style="color: green;"><strong><?= $mensagem ?></strong></p>
-    <?php endif; ?>
+    <p>Não tem conta? <a href="cadastro.php">Cadastre-se</a></p>
 </body>
 </html>
